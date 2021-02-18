@@ -23,8 +23,8 @@ declare class Log {
      * @returns {void}
      */
     static verbose(message: string, options?: {
-        req: Express.Request
-        properties: {[x: string]: any}
+        req?: Express.Request
+        properties?: {[x: string]: any}
     }): void
 
     /**
@@ -36,8 +36,8 @@ declare class Log {
      * @returns {void}
      */
     static info(message: string, options?: {
-        req: Express.Request
-        properties: {[x: string]: any}
+        req?: Express.Request
+        properties?: {[x: string]: any}
     }): void
 
     /**
@@ -49,8 +49,8 @@ declare class Log {
      * @returns {void}
      */
     static warn(message: string, options?: {
-        req: Express.Request
-        properties: {[x: string]: any}
+        req?: Express.Request
+        properties?: {[x: string]: any}
     }): void
 
     /**
@@ -64,8 +64,8 @@ declare class Log {
      */
     static error(message: string, options: {
         err: Error
-        req: Express.Request
-        properties: {[x: string]: any}
+        req?: Express.Request
+        properties?: {[x: string]: any}
     }): void
 
     /**
@@ -79,8 +79,8 @@ declare class Log {
      */
     static critical(message: string, options: {
         err: Error
-        req: Express.Request
-        properties: {[x: string]: any}
+        req?: Express.Request
+        properties?: {[x: string]: any}
     }): void
 }
 
