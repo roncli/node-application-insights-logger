@@ -180,6 +180,7 @@ class Log {
     static error(message, options) {
         if (instrumentationKey && typeof instrumentationKey === "string" && instrumentationKey !== "") {
             const data = Log.getData(options);
+            data.properties.message = message;
             appInsights.defaultClient.trackException({time: new Date(), severity: SeverityLevel.Error, tagOverrides: data.tagOverrides, properties: data.properties, exception: options.err});
         } else {
             console.log(`Error: ${message} ${util.inspect(options.err)}`);
@@ -204,6 +205,7 @@ class Log {
     static critical(message, options) {
         if (instrumentationKey && typeof instrumentationKey === "string" && instrumentationKey !== "") {
             const data = Log.getData(options);
+            data.properties.message = message;
             appInsights.defaultClient.trackException({time: new Date(), severity: SeverityLevel.Critical, tagOverrides: data.tagOverrides, properties: data.properties, exception: options.err});
         } else {
             console.log(`Critical: ${message} ${util.inspect(options.err)}`);

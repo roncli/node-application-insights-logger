@@ -7,7 +7,7 @@ Since this is largely used for personal projects, this is not an npm package.  N
 ```json
 {
     "dependencies": {
-        "node-application-insights-logger": "roncli/node-application-insights-logger#v1.0.0"
+        "node-application-insights-logger": "roncli/node-application-insights-logger#v1.0.1"
     }
 }
 ```
@@ -64,5 +64,8 @@ Logs a verbose, informational, or warning message.
 
 ## Version history
 
-### 1.0
+### v1.0.1 - 2/17/2021
+* Include the message on errors and criticals.
+
+### v1.0.0 - 2/17/2021
 * Initial release.

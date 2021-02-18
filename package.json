@@ -1,6 +1,6 @@
 {
     "name": "node-application-insights-logger",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A simple reusable class that can log to Azure Application Insights.",
     "homepage": "https://github.com/roncli/node-application-insights-logger",
     "bugs": {
