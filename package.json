@@ -1,0 +1,33 @@
+{
+    "name": "node-application-insights-logger",
+    "version": "1.0.0",
+    "description": "A simple reusable class that can log to Azure Application Insights.",
+    "homepage": "https://github.com/roncli/node-application-insights-logger",
+    "bugs": {
+        "email": "roncli@roncli.com",
+        "url": "https://github.com/roncli/node-application-insights-logger/issues"
+    },
+    "license": "MIT",
+    "author": {
+        "email": "roncli@roncli.com",
+        "name": "Ronald M. Clifford",
+        "url": "http://roncli.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/roncli/node-application-insights-logger.git"
+    },
+    "dependencies": {
+        "applicationinsights": "1.8.10"
+    },
+    "devDependencies": {
+        "@babel/core": "7.12.16",
+        "@babel/eslint-parser": "7.12.16",
+        "@types/express": "4.17.11",
+        "@types/node": "14.14.28"
+    },
+    "engines": {
+        "node": ">=10.0.0"
+    },
+    "private": true
+}
