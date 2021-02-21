@@ -1,7 +1,3 @@
-declare namespace Express {
-    type Request = import("express").Request<import("express-serve-static-core").ParamsDictionary, any, any, qs.ParsedQs, Record<string, any>>
-}
-
 /**
  * A static class that handles logging to Application Insights.
  */
