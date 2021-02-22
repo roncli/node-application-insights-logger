@@ -7,7 +7,7 @@ Since this is largely used for personal projects, this is not an npm package.  N
 ```json
 {
     "dependencies": {
-        "node-application-insights-logger": "roncli/node-application-insights-logger#v1.0.2"
+        "node-application-insights-logger": "roncli/node-application-insights-logger#v1.0.3"
     }
 }
 ```
@@ -63,6 +63,10 @@ Logs a verbose, informational, or warning message.
 | **options.properties** | *{[x: string]: any}* | *Optional.*  An object of properties to include with this request.
 
 ## Version history
+
+### v1.0.3 - 2/21/2021
+* Removed unnecessary Express.Request definition in typings.
+* Package Updates.
 
 ### v1.0.2 - 2/17/2021
 * Fixed typings.
