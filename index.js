@@ -35,7 +35,7 @@ class Log {
     // ###     ##     ##   ###  ###   #  #  ###   ###   ###   ###    ##    # #    ##  ###    ##   #  #  ###   #  #  ###    ###   #     #  #    ##  ###
     //                          #           #     #                                                                               ###
     /**
-     * Setups up logging to use Application Insights.  If not called, this library will log to the console instead.
+     * Sets up logging to use Application Insights.  If not called, this library will log to the console instead.
      * @param {string} key The Application Insights instrumentation key.
      * @param {Dictionary.Any} [properties] The base properties to include with every trace and exception.
      * @returns {void}
