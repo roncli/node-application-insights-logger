@@ -183,7 +183,7 @@ class Log {
             data.properties.message = message;
             appInsights.defaultClient.trackException({time: new Date(), severity: SeverityLevel.Error, tagOverrides: data.tagOverrides, properties: data.properties, exception: options.err});
         } else {
-            console.log(`Error: ${message} ${util.inspect(options.err)}`);
+            console.log(`Error: ${message} ${util.inspect(options.err, false, Infinity)}`);
         }
     }
 
@@ -208,7 +208,7 @@ class Log {
             data.properties.message = message;
             appInsights.defaultClient.trackException({time: new Date(), severity: SeverityLevel.Critical, tagOverrides: data.tagOverrides, properties: data.properties, exception: options.err});
         } else {
-            console.log(`Critical: ${message} ${util.inspect(options.err)}`);
+            console.log(`Critical: ${message} ${util.inspect(options.err, false, Infinity)}`);
         }
     }
 }
