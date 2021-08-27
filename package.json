@@ -18,13 +18,13 @@
         "url": "https://github.com/roncli/node-application-insights-logger.git"
     },
     "dependencies": {
-        "applicationinsights": "1.8.10"
+        "applicationinsights": "2.1.6"
     },
     "devDependencies": {
-        "@babel/core": "7.12.17",
-        "@babel/eslint-parser": "7.12.17",
-        "@types/express": "4.17.11",
-        "@types/node": "14.14.31"
+        "@babel/core": "7.15.0",
+        "@babel/eslint-parser": "7.15.0",
+        "@types/express": "4.17.13",
+        "@types/node": "16.7.2"
     },
     "engines": {
         "node": ">=10.0.0"
