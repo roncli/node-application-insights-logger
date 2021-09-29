@@ -18,7 +18,7 @@
         "url": "https://github.com/roncli/node-application-insights-logger.git"
     },
     "dependencies": {
-        "applicationinsights": "2.1.7"
+        "applicationinsights": "2.1.8"
     },
     "devDependencies": {
         "@babel/core": "7.15.5",
