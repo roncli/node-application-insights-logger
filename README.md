@@ -64,6 +64,9 @@ Logs a verbose, informational, or warning message.
 
 ## Version history
 
+### v1.0.5 - 10/1/2021
+* Package updates.
+
 ### v1.0.4 - 8/26/2021
 * Inspect objects past the default depth.
 * Package updates.
