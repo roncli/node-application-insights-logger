@@ -7,14 +7,14 @@ Since this is largely used for personal projects, this is not an npm package.  N
 ```json
 {
     "dependencies": {
-        "node-application-insights-logger": "roncli/node-application-insights-logger#v1.0.4"
+        "@roncli/node-application-insights-logger": "roncli/node-application-insights-logger#v1.0.4"
     }
 }
 ```
 
 ## Usage
 ```javascript
-const Log = require("node-application-insights-logger");
+const Log = require("@roncli/node-application-insights-logger");
 
 // Setup is optional.  If you don't call setup, it will still log to the console.
 Log.setupApplicationInsights("my-instrumentation-key");
