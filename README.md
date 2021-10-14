@@ -7,7 +7,7 @@ Since this is largely used for personal projects, this is not an npm package.  N
 ```json
 {
     "dependencies": {
-        "@roncli/node-application-insights-logger": "roncli/node-application-insights-logger#v1.0.4"
+        "@roncli/node-application-insights-logger": "roncli/node-application-insights-logger#v1.0.5"
     }
 }
 ```
