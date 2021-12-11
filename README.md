@@ -64,6 +64,9 @@ Logs a verbose, informational, or warning message.
 
 ## Version history
 
+### v1.0.7 - 12/11/2021
+* Package updates.
+
 ### v1.0.6 - 11/23/2021
 * Package updates.
 
