@@ -21,7 +21,7 @@
         "applicationinsights": "2.9.5"
     },
     "devDependencies": {
-        "@babel/core": "7.25.9",
+        "@babel/core": "7.26.0",
         "@babel/eslint-parser": "7.25.9",
         "@types/express": "5.0.0",
         "@types/node": "22.7.9"
