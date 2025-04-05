@@ -39,7 +39,7 @@ All functions are static functions, and do not return a value.
 Sets up the library to use Application Insights.  If you do not call this function, all logging will happen to the console.
 | **Parameter** | **Data Type** | **Description** |
 |---|---|---|
-| **key** | *string* | Your Application Insights instrumentation key. |
+| **instrumentationKeyOrConnecitonString** | *string* | Your Application Insights instrumentation key or connection string.  Connection strings are preferred by Azure. |
 | **properties** | *{[x: string]: any}* | *Optional.*  An object of properties to include by default with every request. |
 
 ### Log.verbose(message, options), Log&#46;info(message, options), Log.warn(message, options)

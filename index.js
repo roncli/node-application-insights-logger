@@ -3,84 +3,31 @@
  * @typedef {{[x: string]: any}} Dictionary.Any
  */
 
-const util = require("util"),
+const appInsights = require("applicationinsights"),
+    util = require("util");
 
-    appInsights = require("applicationinsights"),
-    {SeverityLevel} = appInsights.Contracts;
-
-/** @type {string} */
-let instrumentationKey = void 0;
-
-/** @type {Dictionary.Any} */
-let baseProperties = {};
-
-//  #
-//  #
-//  #       ###    ## #
-//  #      #   #  #  #
-//  #      #   #   ##
-//  #      #   #  #
-//  #####   ###    ###
-//                #   #
-//                 ###
+// MARK: class Log
 /**
  * A static class that handles logging to Application Insights.
  */
 class Log {
-    //               #                 ##               ##     #                 #     #                ###                 #          #      #
-    //               #                #  #               #                       #                       #                             #      #
-    //  ###    ##   ###   #  #  ###   #  #  ###   ###    #    ##     ##    ###  ###   ##     ##   ###    #    ###    ###   ##     ###  ###   ###    ###
-    // ##     # ##   #    #  #  #  #  ####  #  #  #  #   #     #    #     #  #   #     #    #  #  #  #   #    #  #  ##      #    #  #  #  #   #    ##
-    //   ##   ##     #    #  #  #  #  #  #  #  #  #  #   #     #    #     # ##   #     #    #  #  #  #   #    #  #    ##    #     ##   #  #   #      ##
-    // ###     ##     ##   ###  ###   #  #  ###   ###   ###   ###    ##    # #    ##  ###    ##   #  #  ###   #  #  ###    ###   #     #  #    ##  ###
-    //                          #           #     #                                                                               ###
-    /**
-     * Sets up logging to use Application Insights.  If not called, this library will log to the console instead.
-     * @param {string} key The Application Insights instrumentation key.
-     * @param {Dictionary.Any} [properties] The base properties to include with every trace and exception.
-     * @returns {void}
-     */
-    static setupApplicationInsights(key, properties) {
-        if (instrumentationKey) {
-            throw new Error("You have already setup Application Insights.");
-        }
+    /** @type {Dictionary.Any} */
+    static #baseProperties = {};
 
-        if (!key || typeof key !== "string") {
-            throw new Error("The Application Insights instrumentation key is required.");
-        }
+    /** @type {string} */
+    static #instrumentationKey = void 0;
 
-        if (properties !== void 0 && typeof properties !== "object") {
-            throw new Error("Expected an object.");
-        }
-
-        instrumentationKey = key;
-
-        appInsights.setup(instrumentationKey).setAutoCollectRequests(false);
-        appInsights.start();
-
-        if (properties) {
-            baseProperties = {...properties};
-        }
-    }
-
-    //              #    ###          #
-    //              #    #  #         #
-    //  ###   ##   ###   #  #   ###  ###    ###
-    // #  #  # ##   #    #  #  #  #   #    #  #
-    //  ##   ##     #    #  #  # ##   #    # ##
-    // #      ##     ##  ###    # #    ##   # #
-    //  ###
+    // MARK: static #getData
     /**
      * Gets the tag overrides and properties from the options.
      * @param {object} [options] The options to pass into the properties.
      * @param {Express.Request} [options.req] The Express request object.
      * @param {Dictionary.Any} [options.properties] The properties to include.
-     * @returns {{tagOverrides: object, properties: object}} The tag overrides and properties objects.
+     * @returns {{properties: object}} The properties object.
      */
-    static getData(options) {
+    static #getData(options) {
         const data = {
-            properties: options && (options.properties ? {...options.properties, ...baseProperties} : {...baseProperties}) || {},
-            tagOverrides: {}
+            properties: options && (options.properties ? {...options.properties, ...Log.#baseProperties} : {...Log.#baseProperties}) || {}
         };
 
         if (options && options.req) {
@@ -89,7 +36,6 @@ class Log {
             }
 
             if (options.req.ip) {
-                data.tagOverrides["ai.location.ip"] = options.req.ip;
                 data.properties.ip = options.req.ip;
             }
         }
@@ -97,12 +43,73 @@ class Log {
         return data;
     }
 
-    //                   #
-    //                   #
-    // # #    ##   ###   ###    ##    ###    ##
-    // # #   # ##  #  #  #  #  #  #  ##     # ##
-    // # #   ##    #     #  #  #  #    ##   ##
-    //  #     ##   #     ###    ##   ###     ##
+    // MARK: static #log
+    /**
+     * Logs a message or exception to Application Insights or the console.
+     * @param {"Verbose" | "Information" | "Warning" | "Error" | "Critical"} level The severity level.
+     * @param {string} message The message to log.
+     * @param {object} [options] The options to pass into the properties.
+     * @param {Express.Request} [options.req] The Express request object.
+     * @param {Dictionary.Any} [options.properties] The properties to include.
+     * @param {Error} [options.err] The error object to log as the exception (for "Error" and "Critical" levels).
+     * @returns {void}
+     */
+    static #log(level, message, options) {
+        if (Log.#instrumentationKey && typeof Log.#instrumentationKey === "string" && Log.#instrumentationKey !== "") {
+            const data = Log.#getData(options);
+            if (level === appInsights.KnownSeverityLevel.Error || level === appInsights.KnownSeverityLevel.Critical) {
+                data.properties.message = message;
+                appInsights.defaultClient.trackException({
+                    time: new Date(),
+                    severity: level,
+                    properties: data.properties,
+                    exception: options?.err
+                });
+            } else {
+                appInsights.defaultClient.trackTrace({
+                    message,
+                    time: new Date(),
+                    severity: appInsights.KnownSeverityLevel[level],
+                    properties: data.properties
+                });
+            }
+        } else {
+            const errorDetails = options?.err ? ` ${util.inspect(options.err, false, Infinity)}` : "";
+            console.log(`${level}: ${message}${errorDetails}`);
+        }
+    }
+
+    // MARK: static setupApplicationInsights
+    /**
+     * Sets up logging to use Application Insights.  If not called, this library will log to the console instead.
+     * @param {string} instrumentationKeyOrConnectionString The Application Insights instrumentation key or connection string.
+     * @param {Dictionary.Any} [properties] The base properties to include with every trace and exception.
+     * @returns {void}
+     */
+    static setupApplicationInsights(instrumentationKeyOrConnectionString, properties) {
+        if (Log.#instrumentationKey) {
+            throw new Error("You have already setup Application Insights.");
+        }
+
+        if (!instrumentationKeyOrConnectionString || typeof instrumentationKeyOrConnectionString !== "string") {
+            throw new Error("The Application Insights instrumentation key is required.");
+        }
+
+        if (properties !== void 0 && typeof properties !== "object") {
+            throw new Error("Expected an object.");
+        }
+
+        Log.#instrumentationKey = instrumentationKeyOrConnectionString;
+
+        appInsights.setup(Log.#instrumentationKey).setAutoCollectRequests(false);
+        appInsights.start();
+
+        if (properties) {
+            Log.#baseProperties = {...properties};
+        }
+    }
+
+    // MARK: static verbose
     /**
      * Logs a verbose message.
      * @param {string} message The message to log.
@@ -112,20 +119,10 @@ class Log {
      * @returns {void}
      */
     static verbose(message, options) {
-        if (instrumentationKey && typeof instrumentationKey === "string" && instrumentationKey !== "") {
-            const data = Log.getData(options);
-            appInsights.defaultClient.trackTrace({message, time: new Date(), severity: SeverityLevel.Verbose, tagOverrides: data.tagOverrides, properties: data.properties});
-        } else {
-            console.log(`Verbose: ${message}`);
-        }
+        Log.#log(appInsights.KnownSeverityLevel.Verbose, message, options);
     }
 
-    //  #            #
-    //              # #
-    // ##    ###    #     ##
-    //  #    #  #  ###   #  #
-    //  #    #  #   #    #  #
-    // ###   #  #   #     ##
+    // MARK: static info
     /**
      * Logs an informational message.
      * @param {string} message The message to log.
@@ -135,18 +132,10 @@ class Log {
      * @returns {void}
      */
     static info(message, options) {
-        if (instrumentationKey && typeof instrumentationKey === "string" && instrumentationKey !== "") {
-            const data = Log.getData(options);
-            appInsights.defaultClient.trackTrace({message, time: new Date(), severity: SeverityLevel.Information, tagOverrides: data.tagOverrides, properties: data.properties});
-        } else {
-            console.log(`Info: ${message}`);
-        }
+        Log.#log(appInsights.KnownSeverityLevel.Information, message, options);
     }
 
-    // #  #   ###  ###   ###
-    // #  #  #  #  #  #  #  #
-    // ####  # ##  #     #  #
-    // ####   # #  #     #  #
+    // MARK: static warn
     /**
      * Logs a warning.
      * @param {string} message The string to log.
@@ -156,18 +145,10 @@ class Log {
      * @returns {void}
      */
     static warn(message, options) {
-        if (instrumentationKey && typeof instrumentationKey === "string" && instrumentationKey !== "") {
-            const data = Log.getData(options);
-            appInsights.defaultClient.trackTrace({message, time: new Date(), severity: SeverityLevel.Warning, tagOverrides: data.tagOverrides, properties: data.properties});
-        } else {
-            console.log(`Warn: ${message}`);
-        }
+        Log.#log(appInsights.KnownSeverityLevel.Warning, message, options);
     }
 
-    //  ##   ###   ###    ##   ###
-    // # ##  #  #  #  #  #  #  #  #
-    // ##    #     #     #  #  #
-    //  ##   #     #      ##   #
+    // MARK: static error
     /**
      * Logs an error.
      * @param {string} message The message describing the error.
@@ -178,21 +159,10 @@ class Log {
      * @returns {void}
      */
     static error(message, options) {
-        if (instrumentationKey && typeof instrumentationKey === "string" && instrumentationKey !== "") {
-            const data = Log.getData(options);
-            data.properties.message = message;
-            appInsights.defaultClient.trackException({time: new Date(), severity: SeverityLevel.Error, tagOverrides: data.tagOverrides, properties: data.properties, exception: options.err});
-        } else {
-            console.log(`Error: ${message} ${util.inspect(options.err, false, Infinity)}`);
-        }
+        Log.#log(appInsights.KnownSeverityLevel.Error, message, options);
     }
 
-    //              #     #     #                ##
-    //                    #                       #
-    //  ##   ###   ##    ###   ##     ##    ###   #
-    // #     #  #   #     #     #    #     #  #   #
-    // #     #      #     #     #    #     # ##   #
-    //  ##   #     ###     ##  ###    ##    # #  ###
+    // MARK: static critical
     /**
      * Logs a critical error.
      * @param {string} message The message describing the error.
@@ -203,13 +173,7 @@ class Log {
      * @returns {void}
      */
     static critical(message, options) {
-        if (instrumentationKey && typeof instrumentationKey === "string" && instrumentationKey !== "") {
-            const data = Log.getData(options);
-            data.properties.message = message;
-            appInsights.defaultClient.trackException({time: new Date(), severity: SeverityLevel.Critical, tagOverrides: data.tagOverrides, properties: data.properties, exception: options.err});
-        } else {
-            console.log(`Critical: ${message} ${util.inspect(options.err, false, Infinity)}`);
-        }
+        Log.#log(appInsights.KnownSeverityLevel.Critical, message, options);
     }
 }
 
