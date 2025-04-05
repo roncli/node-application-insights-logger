@@ -7,7 +7,7 @@ Since this is largely used for personal projects, this is not an npm package.  N
 ```json
 {
     "dependencies": {
-        "@roncli/node-application-insights-logger": "roncli/node-application-insights-logger#v1.0.17"
+        "@roncli/node-application-insights-logger": "roncli/node-application-insights-logger#v1.1.0"
     }
 }
 ```
@@ -63,6 +63,11 @@ Logs a verbose, informational, or warning message.
 | **options.properties** | *{[x: string]: any}* | *Optional.*  An object of properties to include with this request.
 
 ## Version history
+
+### v1.1.0 - 4/4/2025
+* Upgrades required for Application Insights package update.
+* Now accepts either the Application Insights instrumentation key or the connection string.
+* Package updates.
 
 ### v1.0.17 - 11/15/2023
 * Package updates.
