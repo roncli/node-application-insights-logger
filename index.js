@@ -15,7 +15,7 @@ class Log {
     static #baseProperties = {};
 
     /** @type {string} */
-    static #instrumentationKey = void 0;
+    static #instrumentationKeyOrConnectionString = void 0;
 
     // MARK: static #getData
     /**
@@ -55,7 +55,7 @@ class Log {
      * @returns {void}
      */
     static #log(level, message, options) {
-        if (Log.#instrumentationKey && typeof Log.#instrumentationKey === "string" && Log.#instrumentationKey !== "") {
+        if (Log.#instrumentationKeyOrConnectionString && typeof Log.#instrumentationKeyOrConnectionString === "string" && Log.#instrumentationKeyOrConnectionString !== "") {
             const data = Log.#getData(options);
             if (level === appInsights.KnownSeverityLevel.Error || level === appInsights.KnownSeverityLevel.Critical) {
                 data.properties.message = message;
@@ -87,21 +87,21 @@ class Log {
      * @returns {void}
      */
     static setupApplicationInsights(instrumentationKeyOrConnectionString, properties) {
-        if (Log.#instrumentationKey) {
+        if (Log.#instrumentationKeyOrConnectionString) {
             throw new Error("You have already setup Application Insights.");
         }
 
         if (!instrumentationKeyOrConnectionString || typeof instrumentationKeyOrConnectionString !== "string") {
-            throw new Error("The Application Insights instrumentation key is required.");
+            throw new Error("The Application Insights instrumentation key or connection string is required.");
         }
 
         if (properties !== void 0 && typeof properties !== "object") {
             throw new Error("Expected an object.");
         }
 
-        Log.#instrumentationKey = instrumentationKeyOrConnectionString;
+        Log.#instrumentationKeyOrConnectionString = instrumentationKeyOrConnectionString;
 
-        appInsights.setup(Log.#instrumentationKey).setAutoCollectRequests(false);
+        appInsights.setup(Log.#instrumentationKeyOrConnectionString).setAutoCollectRequests(false);
         appInsights.start();
 
         if (properties) {
