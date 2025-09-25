@@ -25,12 +25,12 @@ class Log {
      * @param {Dictionary.Any} [options.properties] The properties to include.
      * @returns {{properties: object}} The properties object.
      */
-    static #getData(options) {
+    static #getData(options = {}) {
         const data = {
-            properties: options && (options.properties ? {...options.properties, ...Log.#baseProperties} : {...Log.#baseProperties}) || {}
+            properties: options.properties ? {...Log.#baseProperties, ...options.properties} : {...Log.#baseProperties}
         };
 
-        if (options && options.req) {
+        if (options.req) {
             if (options.req.path) {
                 data.properties.path = options.req.path;
             }
@@ -95,7 +95,7 @@ class Log {
             throw new Error("The Application Insights instrumentation key or connection string is required.");
         }
 
-        if (properties !== void 0 && typeof properties !== "object") {
+        if (properties !== void 0 && (typeof properties !== "object" || properties === null || Array.isArray(properties))) {
             throw new Error("Expected an object.");
         }
 
@@ -138,7 +138,7 @@ class Log {
     // MARK: static warn
     /**
      * Logs a warning.
-     * @param {string} message The string to log.
+     * @param {string} message The message to log.
      * @param {object} [options] The options to pass into the properties.
      * @param {Express.Request} [options.req] The Express request object.
      * @param {Dictionary.Any} [options.properties] The properties to include.
