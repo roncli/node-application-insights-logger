@@ -84,9 +84,10 @@ class Log {
      * Sets up logging to use Application Insights.  If not called, this library will log to the console instead.
      * @param {string} instrumentationKeyOrConnectionString The Application Insights instrumentation key or connection string.
      * @param {Dictionary.Any} [properties] The base properties to include with every trace and exception.
+     * @param {boolean} [autoCollectRequests] Whether to automatically collect requests.  Defaults to true.
      * @returns {void}
      */
-    static setupApplicationInsights(instrumentationKeyOrConnectionString, properties) {
+    static setupApplicationInsights(instrumentationKeyOrConnectionString, properties, autoCollectRequests = true) {
         if (Log.#instrumentationKeyOrConnectionString) {
             throw new Error("You have already setup Application Insights.");
         }
@@ -101,7 +102,7 @@ class Log {
 
         Log.#instrumentationKeyOrConnectionString = instrumentationKeyOrConnectionString;
 
-        appInsights.setup(Log.#instrumentationKeyOrConnectionString).setAutoCollectRequests(false);
+        appInsights.setup(Log.#instrumentationKeyOrConnectionString).setAutoCollectRequests(autoCollectRequests);
         appInsights.start();
 
         if (properties) {
