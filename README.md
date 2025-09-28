@@ -7,7 +7,7 @@ Since this is largely used for personal projects, this is not an npm package.  N
 ```json
 {
     "dependencies": {
-        "@roncli/node-application-insights-logger": "roncli/node-application-insights-logger#v1.1.1"
+        "@roncli/node-application-insights-logger": "roncli/node-application-insights-logger#v2.0.0"
     }
 }
 ```
@@ -63,6 +63,9 @@ Logs a verbose, informational, or warning message.
 | **options.properties** | *{[x: string]: any}* | *Optional.*  An object of properties to include with this request.
 
 ## Version history
+
+### v2.0.0 - 9/28/2025
+* The `autoCollectRequests` parameter was added to `setupApplicationInsights` and defaults to true now.  If you do not want requests to be automatically collected, you must now explicitly pass in false.
 
 ### v1.1.1 - 9/24/2025
 * Minor optimizations.
