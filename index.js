@@ -74,8 +74,11 @@ class Log {
                 });
             }
         } else {
-            const errorDetails = options?.err ? ` ${util.inspect(options.err, false, Infinity)}` : "";
-            console.log(`${level}: ${message}${errorDetails}`);
+            if (options?.err) {
+                console.error(`${level}: ${message}`, util.inspect(options.err, false, Infinity));
+            } else {
+                console.log(`${level}: ${message}`);
+            }
         }
     }
 
@@ -97,7 +100,7 @@ class Log {
         }
 
         if (properties !== void 0 && (typeof properties !== "object" || properties === null || Array.isArray(properties))) {
-            throw new Error("Expected an object.");
+            throw new Error("Base properties must be a non-null object.");
         }
 
         Log.#instrumentationKeyOrConnectionString = instrumentationKeyOrConnectionString;

@@ -6,9 +6,14 @@ declare class Log {
      * Sets up logging to use Application Insights.  If not called, this library will log to the console instead.
      * @param {string} instrumentationKeyOrConnectionString The Application Insights instrumentation key or connection string.
      * @param {{[x: string]: any}} [properties] The base properties to include with every trace and exception.
+     * @param {boolean} [autoCollectRequests] Whether to automatically collect requests. Defaults to true.
      * @returns {void}
      */
-    static setupApplicationInsights(instrumentationKeyOrConnectionString: string, properties?: {[x: string]: any}): void
+    static setupApplicationInsights(
+        instrumentationKeyOrConnectionString: string,
+        properties?: {[x: string]: any},
+        autoCollectRequests?: boolean
+    ): void
 
     /**
      * Logs a verbose message.
