@@ -73,12 +73,10 @@ class Log {
                     properties: data.properties
                 });
             }
+        } else if (options?.err) {
+            console.error(`${level}: ${message}`, util.inspect(options.err, false, Infinity));
         } else {
-            if (options?.err) {
-                console.error(`${level}: ${message}`, util.inspect(options.err, false, Infinity));
-            } else {
-                console.log(`${level}: ${message}`);
-            }
+            console.log(`${level}: ${message}`);
         }
     }
 
