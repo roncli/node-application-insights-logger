@@ -18,7 +18,7 @@
         "url": "git+https://github.com/roncli/node-application-insights-logger.git"
     },
     "dependencies": {
-        "applicationinsights": "3.13.0"
+        "applicationinsights": "3.14.0"
     },
     "devDependencies": {
         "@eslint/js": "10.0.1",
